@@ -61,6 +61,8 @@ public class LineChartActivity extends ActionBarActivity {
         private boolean hasPoints = true;
         private ValueShape shape = ValueShape.CIRCLE;
         private boolean isFilled = false;
+        private boolean isFilledByGradient = false;
+        private int startGradientColor, endGradientColor;
         private boolean hasLabels = false;
         private boolean isCubic = false;
         private boolean hasLabelForSelected = false;
@@ -121,6 +123,10 @@ public class LineChartActivity extends ActionBarActivity {
             }
             if (id == R.id.action_toggle_area) {
                 toggleFilled();
+                return true;
+            }
+            if (id == R.id.action_toggle_area_by_gradient) {
+                toggleFilledByGradient();
                 return true;
             }
             if (id == R.id.action_shape_circles) {
@@ -227,14 +233,20 @@ public class LineChartActivity extends ActionBarActivity {
                 }
 
                 Line line = new Line(values);
+
+                if(isFilled && isFilledByGradient)
+                {
+                    line.setGradientColor(startGradientColor, endGradientColor);
+                }
+                else
+                {
+                    line.setGradientColor(-1, -1);
+                }
+
                 line.setColor(ChartUtils.COLORS[i]);
                 line.setShape(shape);
                 line.setCubic(isCubic);
                 line.setFilled(isFilled);
-                if(isFilled)
-                {
-                    line.setGradientColor(Color.RED, Color.YELLOW);
-                }
                 line.setHasLabels(hasLabels);
                 line.setHasLabelsOnlyForSelected(hasLabelForSelected);
                 line.setHasLines(hasLines);
@@ -346,6 +358,16 @@ public class LineChartActivity extends ActionBarActivity {
             isFilled = !isFilled;
 
             generateData();
+        }
+
+        private void toggleFilledByGradient()
+        {
+            isFilled = !isFilledByGradient;
+            isFilledByGradient = !isFilledByGradient;
+            startGradientColor = Color.RED;
+            endGradientColor = Color.YELLOW;
+
+            generateData();
 
             // for change line color
             Runnable runnable = new Runnable()
@@ -355,16 +377,14 @@ public class LineChartActivity extends ActionBarActivity {
                 {
                     long downTime = SystemClock.uptimeMillis();
                     long eventTime = SystemClock.uptimeMillis() + 100;
-                    float x = 0.0f;
-                    float y = 0.0f;
-                    int metaState = 0;
-                    MotionEvent downMotionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, metaState);
+                    MotionEvent downMotionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, 0, 0, 0);
                     chart.dispatchTouchEvent(downMotionEvent);
                 }
             };
             Handler handler = new Handler();
-            handler.post(runnable);//.postDelayed(runnable, 1);
+            handler.postDelayed(runnable, 10);
         }
+
 
         private void setCircles() {
             shape = ValueShape.CIRCLE;

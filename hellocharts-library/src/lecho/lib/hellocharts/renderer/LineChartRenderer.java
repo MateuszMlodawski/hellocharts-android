@@ -498,6 +498,10 @@ public class LineChartRenderer extends AbstractChartRenderer {
         {
             linePaint.setShader(new LinearGradient(0, 0, 0, canvas.getHeight(), line.getStartGradientColor(), line.getEndGradientColor(), Shader.TileMode.MIRROR));
         }
+        else
+        {
+            linePaint.setShader(null);
+        }
 
         linePaint.setAlpha(line.getAreaTransparency());
         canvas.drawPath(path, linePaint);
