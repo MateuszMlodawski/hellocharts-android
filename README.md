@@ -44,6 +44,8 @@ Apache License 2.0.
 
 ![](screens/scr-combo.png)
 
+![](screens/fill_area_by_gradient.jpg)
+
 ##Download and Import
 
 ####Android Studio/Gradle
