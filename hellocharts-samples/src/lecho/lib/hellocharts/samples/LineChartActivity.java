@@ -1,12 +1,16 @@
 package lecho.lib.hellocharts.samples;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -227,6 +231,10 @@ public class LineChartActivity extends ActionBarActivity {
                 line.setShape(shape);
                 line.setCubic(isCubic);
                 line.setFilled(isFilled);
+                if(isFilled)
+                {
+                    line.setGradientColor(Color.RED, Color.YELLOW);
+                }
                 line.setHasLabels(hasLabels);
                 line.setHasLabelsOnlyForSelected(hasLabelForSelected);
                 line.setHasLines(hasLines);
@@ -338,6 +346,24 @@ public class LineChartActivity extends ActionBarActivity {
             isFilled = !isFilled;
 
             generateData();
+
+            // for change line color
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    long downTime = SystemClock.uptimeMillis();
+                    long eventTime = SystemClock.uptimeMillis() + 100;
+                    float x = 0.0f;
+                    float y = 0.0f;
+                    int metaState = 0;
+                    MotionEvent downMotionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, metaState);
+                    chart.dispatchTouchEvent(downMotionEvent);
+                }
+            };
+            Handler handler = new Handler();
+            handler.post(runnable);//.postDelayed(runnable, 1);
         }
 
         private void setCircles() {

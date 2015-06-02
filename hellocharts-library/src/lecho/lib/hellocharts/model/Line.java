@@ -19,6 +19,7 @@ public class Line {
     private static final int DEFAULT_AREA_TRANSPARENCY = 64;
     private int color = ChartUtils.DEFAULT_COLOR;
     private int darkenColor = ChartUtils.DEFAULT_DARKEN_COLOR;
+    private int startGradientColor = -1, endGradientColor = -1;
     /**
      * Transparency of area when line is filled. *
      */
@@ -48,6 +49,8 @@ public class Line {
     public Line(Line line) {
         this.color = line.color;
         this.darkenColor = line.color;
+        this.startGradientColor = startGradientColor;
+        this.endGradientColor = endGradientColor;
         this.areaTransparency = line.areaTransparency;
         this.strokeWidth = line.strokeWidth;
         this.pointRadius = line.pointRadius;
@@ -226,6 +229,24 @@ public class Line {
         this.isFilled = isFilled;
         return this;
     }
+
+    public int getStartGradientColor()
+    {
+        return startGradientColor;
+    }
+
+    public int getEndGradientColor()
+    {
+        return endGradientColor;
+    }
+
+    public Line setGradientColor(int startColor, int endColor)
+    {
+        this.startGradientColor = startColor;
+        this.endGradientColor = endColor;
+        return this;
+    }
+
 
     /**
      * @see #setShape(ValueShape)
