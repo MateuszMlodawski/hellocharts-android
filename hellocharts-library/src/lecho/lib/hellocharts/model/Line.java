@@ -52,8 +52,8 @@ public class Line {
         this.color = line.color;
         this.pointColor = line.pointColor;
         this.darkenColor = line.darkenColor;
-        this.startGradientColor = startGradientColor;
-        this.endGradientColor = endGradientColor;
+        this.startGradientColor = line.startGradientColor;
+        this.endGradientColor = line.endGradientColor;
         this.areaTransparency = line.areaTransparency;
         this.strokeWidth = line.strokeWidth;
         this.pointRadius = line.pointRadius;
@@ -253,18 +253,15 @@ public class Line {
         return this;
     }
 
-    public int getStartGradientColor()
-    {
+    public int getStartGradientColor() {
         return startGradientColor;
     }
 
-    public int getEndGradientColor()
-    {
+    public int getEndGradientColor() {
         return endGradientColor;
     }
 
-    public Line setGradientColor(int startColor, int endColor)
-    {
+    public Line setGradientColor(int startColor, int endColor) {
         this.startGradientColor = startColor;
         this.endGradientColor = endColor;
         return this;
