@@ -1,12 +1,16 @@
 package lecho.lib.hellocharts.samples;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -57,6 +61,8 @@ public class LineChartActivity extends ActionBarActivity {
         private boolean hasPoints = true;
         private ValueShape shape = ValueShape.CIRCLE;
         private boolean isFilled = false;
+        private boolean isFilledByGradient = false;
+        private int startGradientColor, endGradientColor;
         private boolean hasLabels = false;
         private boolean isCubic = false;
         private boolean hasLabelForSelected = false;
@@ -118,6 +124,10 @@ public class LineChartActivity extends ActionBarActivity {
             }
             if (id == R.id.action_toggle_area) {
                 toggleFilled();
+                return true;
+            }
+            if (id == R.id.action_toggle_area_by_gradient) {
+                toggleFilledByGradient();
                 return true;
             }
             if (id == R.id.action_point_color) {
@@ -229,6 +239,16 @@ public class LineChartActivity extends ActionBarActivity {
                 }
 
                 Line line = new Line(values);
+
+                if(isFilled && isFilledByGradient)
+                {
+                    line.setGradientColor(startGradientColor, endGradientColor);
+                }
+                else
+                {
+                    line.setGradientColor(-1, -1);
+                }
+
                 line.setColor(ChartUtils.COLORS[i]);
                 line.setShape(shape);
                 line.setCubic(isCubic);
@@ -354,6 +374,32 @@ public class LineChartActivity extends ActionBarActivity {
 
             generateData();
         }
+
+        private void toggleFilledByGradient()
+        {
+            isFilled = !isFilledByGradient;
+            isFilledByGradient = !isFilledByGradient;
+            startGradientColor = Color.RED;
+            endGradientColor = Color.YELLOW;
+
+            generateData();
+
+            // for change line color
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    long downTime = SystemClock.uptimeMillis();
+                    long eventTime = SystemClock.uptimeMillis() + 100;
+                    MotionEvent downMotionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, 0, 0, 0);
+                    chart.dispatchTouchEvent(downMotionEvent);
+                }
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 10);
+        }
+
 
         private void setCircles() {
             shape = ValueShape.CIRCLE;

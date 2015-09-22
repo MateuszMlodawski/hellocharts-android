@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
+import android.graphics.Shader;
 
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
@@ -66,8 +68,7 @@ public class LineChartRenderer extends AbstractChartRenderer {
 
     public void onChartSizeChanged() {
         final int internalMargin = calculateContentRectInternalMargin();
-        computator.insetContentRectByInternalMargins(internalMargin, internalMargin,
-                internalMargin, internalMargin);
+        computator.insetContentRectByInternalMargins(internalMargin, internalMargin, internalMargin, internalMargin);
         if (computator.getChartWidth() > 0 && computator.getChartHeight() > 0) {
             softwareBitmap = Bitmap.createBitmap(computator.getChartWidth(), computator.getChartHeight(),
                     Bitmap.Config.ARGB_8888);
@@ -469,8 +470,7 @@ public class LineChartRenderer extends AbstractChartRenderer {
         }
 
         labelBackgroundRect.set(left, top, right, bottom);
-        drawLabelTextAndBackground(canvas, labelBuffer, labelBuffer.length - numChars, numChars,
-                line.getDarkenColor());
+        drawLabelTextAndBackground(canvas, labelBuffer, labelBuffer.length - numChars, numChars, line.getDarkenColor());
     }
 
     private void drawArea(Canvas canvas, Line line) {
@@ -493,6 +493,16 @@ public class LineChartRenderer extends AbstractChartRenderer {
         path.close();
 
         linePaint.setStyle(Paint.Style.FILL);
+
+        if(line.getStartGradientColor() != -1 && line.getEndGradientColor() != -1)
+        {
+            linePaint.setShader(new LinearGradient(0, 0, 0, canvas.getHeight(), line.getStartGradientColor(), line.getEndGradientColor(), Shader.TileMode.MIRROR));
+        }
+        else
+        {
+            linePaint.setShader(null);
+        }
+
         linePaint.setAlpha(line.getAreaTransparency());
         canvas.drawPath(path, linePaint);
         linePaint.setStyle(Paint.Style.STROKE);
