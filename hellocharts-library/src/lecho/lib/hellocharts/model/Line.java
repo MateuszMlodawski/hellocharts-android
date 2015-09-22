@@ -8,6 +8,7 @@ import java.util.List;
 import lecho.lib.hellocharts.formatter.LineChartValueFormatter;
 import lecho.lib.hellocharts.formatter.SimpleLineChartValueFormatter;
 import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.util.ShadowLayer;
 import lecho.lib.hellocharts.view.Chart;
 
 /**
@@ -39,6 +40,7 @@ public class Line {
     private PathEffect pathEffect;
     private LineChartValueFormatter formatter = new SimpleLineChartValueFormatter();
     private List<PointValue> values = new ArrayList<PointValue>();
+    private ShadowLayer shadowLayer = new ShadowLayer(0f, 0f, 0f, 0);
 
     public Line() {
 
@@ -52,8 +54,8 @@ public class Line {
         this.color = line.color;
         this.pointColor = line.pointColor;
         this.darkenColor = line.darkenColor;
-        this.startGradientColor = startGradientColor;
-        this.endGradientColor = endGradientColor;
+        this.startGradientColor = line.startGradientColor;
+        this.endGradientColor = line.endGradientColor;
         this.areaTransparency = line.areaTransparency;
         this.strokeWidth = line.strokeWidth;
         this.pointRadius = line.pointRadius;
@@ -67,6 +69,7 @@ public class Line {
         this.shape = line.shape;
         this.pathEffect = line.pathEffect;
         this.formatter = line.formatter;
+        this.shadowLayer = line.shadowLayer;
 
         for (PointValue pointValue : line.values) {
             this.values.add(new PointValue(pointValue));
@@ -253,18 +256,15 @@ public class Line {
         return this;
     }
 
-    public int getStartGradientColor()
-    {
+    public int getStartGradientColor() {
         return startGradientColor;
     }
 
-    public int getEndGradientColor()
-    {
+    public int getEndGradientColor() {
         return endGradientColor;
     }
 
-    public Line setGradientColor(int startColor, int endColor)
-    {
+    public Line setGradientColor(int startColor, int endColor) {
         this.startGradientColor = startColor;
         this.endGradientColor = endColor;
         return this;
@@ -311,6 +311,15 @@ public class Line {
         if (null != formatter) {
             this.formatter = formatter;
         }
+        return this;
+    }
+
+    public ShadowLayer getShadowLayer() {
+        return shadowLayer;
+    }
+
+    public Line setShadowLayer(ShadowLayer shadowLayer) {
+        this.shadowLayer = shadowLayer;
         return this;
     }
 }
